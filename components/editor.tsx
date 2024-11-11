@@ -120,8 +120,8 @@ const formatScriptOutput = (script: string) => {
       if (prevLine === prevLine.toUpperCase() && prevLine.length > 0 && !prevLine.startsWith('(') &&
       !prevLine.match(/^(INT\.|EXT\.|EST\.|INT\/EXT\.|EXT\/INT\.)/i) && !prevLine.match(/^[A-Z\s]+TO:$/)) {
         let dialogueText = trimmedLine;
-        const startsWithQuote = trimmedLine.trimStart().startsWith('"');
-        const endsWithQuote = trimmedLine.trimEnd().endsWith('"');
+        const startsWithQuote = trimmedLine.startsWith('"');
+        const endsWithQuote = trimmedLine.endsWith('"');
 
         if (!startsWithQuote && !endsWithQuote) {
           // Add quotes at both ends
