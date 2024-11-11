@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 //import { Textarea } from "@/components/ui/textarea"
-import { PenTool, Save, Download, RefreshCw, Loader2 } from "lucide-react"
+import { PenTool, Save, Download, Square, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Toggle } from "@/components/ui/toggle"
@@ -199,15 +199,66 @@ export function Editor() {
     }
     formatRequestRef.current = new AbortController();
 
-    const prompt = `You are a professional screenplay formatter. Format the following text into a professional Hollywood standard screenplay format.
-    
+    const prompt = `You are a professional screenplay formatter with expertise in Hollywood standard formatting. Format the following text into a proper screenplay following these EXACT rules:
+
+INPUT TEXT:
 ${inputScript}
 
-IMPORTANT INSTRUCTIONS:
-- Preserve all original content and story structure
-- Make sure to output the full original character count, including spaces and punctuations
-- Convert script to present tense and check spelling and grammar
-- Format the output as a proper screenplay with scene headings, action lines, character names, parentheticals, and dialogue`;
+FORMATTING RULES:
+1. Scene Headings (Sluglines):
+   - Always in CAPS
+   - Start with INT. or EXT.
+   - Include location and time of day
+   - Example: "INT. OFFICE - DAY"
+
+2. Action Lines:
+   - Present tense
+   - Describe only what can be seen or heard
+   - No camera directions
+   - Single-spaced
+   - Left-aligned
+
+3. Character Names:
+   - ALL CAPS
+   - Centered
+   - First appearance includes brief description
+   - No actor suggestions
+
+4. Dialogue:
+   - Centered under character name
+   - Wrapped at natural speech points
+   - Include quotation marks
+   - No bold or italics
+
+5. Parentheticals:
+   - (in parentheses)
+   - Under character name, above dialogue
+   - Only essential acting notes
+   - Example: "(whispers)"
+
+6. Transitions:
+   - Right-aligned
+   - ALL CAPS
+   - End with TO:
+   - Example: "CUT TO:"
+
+7. General Rules:
+   - Use Courier font style formatting
+   - No underlining or special formatting
+   - One inch margins all around
+   - Present tense throughout
+   - Clear scene breaks
+   - Proper spacing between elements
+
+IMPORTANT:
+- Maintain all original story elements and character names
+- Convert all past tense to present tense
+- Check spelling and grammar
+- Format EXACTLY as specified above
+- Do not add or remove story content
+- Keep all dialogue intact with proper quotation marks
+
+Format the script now, following these rules exactly:`;
 
     try {
       await callOllamaAPI(
@@ -372,13 +423,13 @@ IMPORTANT INSTRUCTIONS:
     doc.save("screenplay.pdf");
   };
 
-  const handleReRoll = async () => {
-    if (inputScript) {
-      await handleFormat()
-    } else {
-      alert('Please enter a script to re-roll.')
+  const handleStop = () => {
+    if (formatRequestRef.current && isFormatting) {
+      formatRequestRef.current.abort();
+      setIsFormatting(false);
+      console.log('Format request aborted by user');
     }
-  }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-100 via-purple-50 to-white">
@@ -517,11 +568,12 @@ IMPORTANT INSTRUCTIONS:
                     <Download className="mr-2 h-4 w-4" /> Export PDF
                   </Button>
                   <Button 
-                    onClick={handleReRoll}
+                    onClick={handleStop}
                     variant="outline"
                     className="border-purple-600 text-purple-600 hover:bg-purple-100"
+                    disabled={!isFormatting}
                   >
-                    <RefreshCw className="mr-2 h-4 w-4" /> Re-roll
+                    <Square className="mr-2 h-4 w-4" /> Stop
                   </Button>
                 </div>
               </div>
