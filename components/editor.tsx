@@ -199,62 +199,16 @@ export function Editor() {
     }
     formatRequestRef.current = new AbortController();
 
-    const prompt = `You are a professional screenplay formatter with expertise in Hollywood standard formatting. Format the following text into a proper screenplay following these EXACT rules:
+    const prompt = `You are a professional screenplay formatter with expertise in Hollywood standard formatting. Format and convert the following text into a proper movie screenplay following these EXACT rules:
 
 INPUT TEXT:
 ${inputScript}
-
-FORMATTING RULES:
-1. Scene Headings (Sluglines):
-   - Always in CAPS
-   - Start with INT. or EXT.
-   - Include location and time of day
-   - Example: "INT. OFFICE - DAY"
-
-2. Action Lines:
-   - Present tense
-   - Describe only what can be seen or heard
-   - No camera directions
-   - Single-spaced
-   - Left-aligned
-
-3. Character Names:
-   - ALL CAPS
-   - Centered
-   - First appearance includes brief description
-   - No actor suggestions
-
-4. Dialogue:
-   - Centered under character name
-   - Wrapped at natural speech points
-   - Include quotation marks
-   - No bold or italics
-
-5. Parentheticals:
-   - (in parentheses)
-   - Under character name, above dialogue
-   - Only essential acting notes
-   - Example: "(whispers)"
-
-6. Transitions:
-   - Right-aligned
-   - ALL CAPS
-   - End with TO:
-   - Example: "CUT TO:"
-
-7. General Rules:
-   - Use Courier font style formatting
-   - No underlining or special formatting
-   - One inch margins all around
-   - Present tense throughout
-   - Clear scene breaks
-   - Proper spacing between elements
 
 IMPORTANT:
 - Maintain all original story elements and character names
 - Convert all past tense to present tense
 - Check spelling and grammar
-- Format EXACTLY as specified above
+- Format EXACTLY as expected of a Hollywood script
 - Do not add or remove story content
 - Keep all dialogue intact with proper quotation marks
 
